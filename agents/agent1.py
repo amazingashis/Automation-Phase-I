@@ -63,14 +63,14 @@ if __name__ == "__main__":
     parser.add_argument("--output", help="Path to output JSON schema file.")
     args = parser.parse_args()
 
-    # Use LM Studio's OpenAI-compatible API for Llama 3 inference
+    # Use LM Studio's OpenAI-compatible API for Gemma model inference
     import requests
 
     def lmstudio_llm(prompt):
         url = "http://127.0.0.1:1234/v1/chat/completions"
         headers = {"Content-Type": "application/json"}
         data = {
-            "model": "llama-3.2-3b-instruct",
+            "model": "gemma-3n-E4B-it-Q4_K_M",
             "messages": [
                 {"role": "system", "content": "You are a helpful AI assistant for data engineering."},
                 {"role": "user", "content": prompt}

@@ -30,7 +30,7 @@ def lmstudio_llm(prompt):
     url = "http://127.0.0.1:1234/v1/chat/completions"
     headers = {"Content-Type": "application/json"}
     data = {
-        "model": "llama-3.2-3b-instruct",
+        "model": "google/gemma-3n-e4b",
         "messages": [
             {"role": "system", "content": "You are a helpful AI assistant for data engineering."},
             {"role": "user", "content": prompt}
