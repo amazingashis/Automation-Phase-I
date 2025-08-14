@@ -17,13 +17,13 @@ def generate_pyspark_import(csv_path, schema_json_path, output_script_path=None)
             'integer': 'IntegerType()',
             'float': 'FloatType()',
             'boolean': 'BooleanType()',
-            'string': 'StringType()'
+            'string': 'StringType()',
+            'date': 'DateType()'
         }.get(dtype, 'StringType()')
         spark_schema_fields.append(f"StructField('{name}', {spark_type}, {str(nullable)})")
     spark_schema = ",\n    ".join(spark_schema_fields)
-    script = f"""
-from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, BooleanType, StringType
+    script = f"""from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, BooleanType, StringType, DateType
 
 spark = SparkSession.builder.getOrCreate()
 schema = StructType([

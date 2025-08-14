@@ -1,6 +1,5 @@
-
 from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, BooleanType, StringType
+from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, BooleanType, StringType, DateType
 
 spark = SparkSession.builder.getOrCreate()
 schema = StructType([
@@ -10,8 +9,8 @@ schema = StructType([
     StructField('email', StringType(), False),
     StructField('gender', StringType(), False),
     StructField('plan', StringType(), False),
-    StructField('effective_date', StringType(), False),
-    StructField('termination_date', StringType(), False),
+    StructField('effective_date', DateType(), False),
+    StructField('termination_date', DateType(), False),
     StructField('record_type', StringType(), False),
     StructField('state', StringType(), False),
     StructField('address 1', StringType(), False),
