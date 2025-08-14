@@ -1,0 +1,89 @@
+{
+    "type": "struct",
+    "fields": [
+        {
+            "name": "id",
+            "type": "integer",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "first_name",
+            "type": "string",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "last_name",
+            "type": "string",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "email",
+            "type": "string",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "gender",
+            "type": "string",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "plan",
+            "type": "string",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "effective_date",
+            "type": "date",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "termination_date",
+            "type": "date",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "record_type",
+            "type": "string",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "state",
+            "type": "string",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "address 1",
+            "type": "string",
+            "nullable": false,
+            "metadata": {}
+        },
+        {
+            "name": "address 2",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+        },
+        {
+            "name": "medical_record_number",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+        },
+        {
+            "name": "division name",
+            "type": "string",
+            "nullable": false,
+            "metadata": {}
+        }
+    ]
+}
