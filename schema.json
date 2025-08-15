@@ -2,85 +2,85 @@
     "type": "struct",
     "fields": [
         {
-            "name": "id",
+            "name": "MemberID",
             "type": "integer",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "first_name",
+            "name": "Name",
             "type": "string",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "last_name",
+            "name": "FamilyName",
             "type": "string",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "email",
+            "name": "Email",
             "type": "string",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "gender",
+            "name": "Gender",
             "type": "string",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "plan",
+            "name": "PlanType",
             "type": "string",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "effective_date",
+            "name": "EnrollmentStartDate",
             "type": "date",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "termination_date",
+            "name": "TerminationDate",
             "type": "date",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "record_type",
+            "name": "Benefits",
             "type": "string",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "state",
+            "name": "State",
             "type": "string",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "address 1",
+            "name": "AddressLine1",
             "type": "string",
             "nullable": false,
             "metadata": {}
         },
         {
-            "name": "address 2",
+            "name": "AddressLine2",
             "type": "string",
             "nullable": true,
             "metadata": {}
         },
         {
-            "name": "medical_record_number",
+            "name": "MemberID.1",
             "type": "string",
             "nullable": true,
             "metadata": {}
         },
         {
-            "name": "division name",
+            "name": "InsuranceType",
             "type": "string",
             "nullable": false,
             "metadata": {}

@@ -1,42 +1,56 @@
-# header_infer.py
-# Agent to infer column names for a CSV file with no header using LLM and sample data.
-
 import pandas as pd
-import os
-import json
 
-def infer_header_from_samples(csv_path, llm=None, nrows=5):
+def infer_header_from_samples(csv_path, llm=None, nrows=10):
+    """
+    Infers column headers for a CSV file with no header using LLM and user-provided data type description.
+    Prints the LLM's feedback for transparency.
+    """
+    # Read top nrows without header
     df = pd.read_csv(csv_path, nrows=nrows, header=None)
     sample_rows = df.values.tolist()
+
+    print(f"Sample data (top {nrows} rows):")
+    for i, row in enumerate(sample_rows):
+        print(f"Row {i+1}: {row}")
+
     # Ask user for a brief description of the data type/content
-    print("No headers detected. Please provide a brief description of the data type or content in this file (e.g., 'healthcare enrollment', 'employee payroll', 'customer orders', etc.):")
+    print("\nPlease provide a brief description of what type of data this is:")
+    print("(e.g., 'healthcare enrollment', 'employee payroll', 'customer orders', 'sales data', etc.)")
     data_type_desc = input("Data type/description: ")
+
+    # Prepare prompt for LLM
+    num_columns = df.shape[1]
     prompt = f"""
-You are a data expert. The user says this file contains: {data_type_desc}
-Given the following sample rows from a CSV file with NO header, infer the most likely column names for each column. Return a Python list of column names, in order, that best matches the described data type.
-Sample rows:
+Given the following {nrows} rows of data from a CSV file containing {data_type_desc}, infer the most likely column headers.
+Data rows:
 {sample_rows}
-Respond with only a Python list of column names.
+
+This file has exactly {num_columns} columns. Return exactly {num_columns} comma-separated column names that best describe each column based on the data type: {data_type_desc}
 """
+
     if llm is not None:
-        col_names_str = llm(prompt)
-        print("\n[LLM raw output for header inference]:\n", col_names_str)
-        # Remove code block markers if present
-        if col_names_str.strip().startswith('```'):
-            col_names_str = col_names_str.strip().lstrip('`')
-            # Remove language if present (e.g., python)
-            if col_names_str.lower().startswith('python'):
-                col_names_str = col_names_str[6:].lstrip('\n')
-            # Remove trailing code block
-            if '```' in col_names_str:
-                col_names_str = col_names_str.split('```')[0]
+        llm_response = llm(prompt)
+        print("\n[LLM feedback for header inference]:\n", llm_response)
+        # Attempt to extract a comma-separated list from the LLM response
         try:
-            col_names = eval(col_names_str)
-            if not isinstance(col_names, list):
-                raise ValueError("LLM did not return a list of column names.")
+            cleaned = llm_response.strip()
+            # Remove code block markers if present
+            if cleaned.startswith("```"):
+                cleaned = cleaned.lstrip("`")
+                if cleaned.lower().startswith("python"):
+                    cleaned = cleaned[6:].lstrip('\n')
+                if "```" in cleaned:
+                    cleaned = cleaned.split("```")[0]
+            # Take only the first line if LLM returns extra text
+            cleaned = cleaned.splitlines()[0]
+            col_names = [col.strip() for col in cleaned.split(",") if col.strip()]
+            if not col_names:
+                raise ValueError("LLM did not return any column names.")
+            if len(col_names) != df.shape[1]:
+                raise ValueError(f"LLM returned {len(col_names)} column names, but file has {df.shape[1]} columns.")
         except Exception as e:
-            print("\n[Warning] LLM did not return a valid list of column names.")
-            print("LLM output:", col_names_str)
+            print("\n[Warning] LLM did not return a valid comma-separated list of column names.")
+            print("LLM output:", llm_response)
             print("Error:", e)
             print("\nPlease enter the column names manually, separated by commas (e.g. id,first_name,last_name):")
             user_input = input("Column names: ")
@@ -51,6 +65,6 @@ if __name__ == "__main__":
     parser.add_argument("csv_path", help="Path to the CSV file.")
     parser.add_argument("--nrows", type=int, default=10, help="Number of rows to sample.")
     args = parser.parse_args()
-    llm = None
+    llm = None  # Replace with your LLM function if running standalone
     headers = infer_header_from_samples(args.csv_path, llm=llm, nrows=args.nrows)
     print(headers)

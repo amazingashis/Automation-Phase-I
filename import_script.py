@@ -4,20 +4,20 @@ from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, B
 
 spark = SparkSession.builder.getOrCreate()
 schema = StructType([
-    StructField('id', IntegerType(), False),
-    StructField('first_name', StringType(), False),
-    StructField('last_name', StringType(), False),
-    StructField('email', StringType(), False),
-    StructField('gender', StringType(), False),
-    StructField('plan', StringType(), False),
-    StructField('effective_date', DateType(), False),
-    StructField('termination_date', DateType(), False),
-    StructField('record_type', StringType(), False),
-    StructField('state', StringType(), False),
-    StructField('address 1', StringType(), False),
-    StructField('address 2', StringType(), True),
-    StructField('medical_record_number', StringType(), True),
-    StructField('division name', StringType(), False)
+    StructField('MemberID', IntegerType(), False),
+    StructField('Name', StringType(), False),
+    StructField('FamilyName', StringType(), False),
+    StructField('Email', StringType(), False),
+    StructField('Gender', StringType(), False),
+    StructField('PlanType', StringType(), False),
+    StructField('EnrollmentStartDate', DateType(), False),
+    StructField('TerminationDate', DateType(), False),
+    StructField('Benefits', StringType(), False),
+    StructField('State', StringType(), False),
+    StructField('AddressLine1', StringType(), False),
+    StructField('AddressLine2', StringType(), True),
+    StructField('MemberID.1', StringType(), True),
+    StructField('InsuranceType', StringType(), False)
 ])
-df = spark.read.csv('source_files\member file csv.csv', header=True, schema=schema)
+df = spark.read.csv('source_files\member file csv no header.csv', header=True, schema=schema)
 df.show(5)

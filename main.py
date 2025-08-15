@@ -37,7 +37,7 @@ def lmstudio_llm(prompt):
             {"role": "system", "content": "You are a helpful AI assistant for data engineering."},
             {"role": "user", "content": prompt}
         ],
-        "max_tokens": 16,
+        "max_tokens": 200,
         "temperature": 0
     }
     response = requests.post(url, headers=headers, json=data)
