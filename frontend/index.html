@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Schema Inference Workflow</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI Schema Inference Workflow</h1>
+            <p>Upload CSV files and get AI-powered schema inference and Databricks import scripts</p>
+        </header>
+
+        <div class="main-content">
+            <!-- File Upload Section -->
+            <div class="section">
+                <h2>📁 Upload CSV File</h2>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="csvFile" accept=".csv" hidden>
+                    <div class="upload-content">
+                        <span class="upload-icon">📁</span>
+                        <p>Click to select CSV file or drag and drop</p>
+                        <span class="file-info" id="fileInfo"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Type Input Section -->
+            <div class="section" id="dataTypeSection" style="display: none;">
+                <h2>📊 Data Analysis</h2>
+                <p>Analyzing your CSV file structure...</p>
+                <div id="dataTypeContent">
+                    <p>Please describe what type of data this CSV contains (this helps AI infer better headers):</p>
+                    <input type="text" id="dataTypeInput" placeholder="e.g., healthcare enrollment, employee payroll, customer orders..." class="data-input">
+                </div>
+                <button id="analyzeBtn" class="btn btn-primary">🔍 Analyze File</button>
+            </div>
+
+            <!-- Header Validation Section -->
+            <div class="section" id="headerSection" style="display: none;">
+                <h2>🏷️ Inferred Headers</h2>
+                <div id="headerDisplay"></div>
+                <div class="validation-buttons">
+                    <button id="approveHeadersBtn" class="btn btn-success">✅ Approve Headers</button>
+                    <button id="editHeadersBtn" class="btn btn-warning">✏️ Edit Headers</button>
+                    <button id="rejectHeadersBtn" class="btn btn-danger">❌ Reject & Retry</button>
+                </div>
+            </div>
+
+            <!-- Schema Validation Section -->
+            <div class="section" id="schemaSection" style="display: none;">
+                <h2>🗂️ Inferred Schema</h2>
+                <div id="schemaDisplay"></div>
+                <div class="validation-buttons">
+                    <button id="approveSchemaBtn" class="btn btn-success">✅ Approve Schema</button>
+                    <button id="rejectSchemaBtn" class="btn btn-danger">❌ Reject Schema</button>
+                </div>
+            </div>
+
+            <!-- Import Script Section -->
+            <div class="section" id="scriptSection" style="display: none;">
+                <h2>🚀 Generated Databricks Import Script</h2>
+                <div class="script-container">
+                    <pre id="scriptDisplay"></pre>
+                    <button id="downloadScriptBtn" class="btn btn-primary">💾 Download Script</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Panel -->
+        <div class="feedback-panel">
+            <h3>💬 Workflow Updates</h3>
+            <div id="feedbackDisplay" class="feedback-list">
+                <div class="feedback-item info">
+                    <span class="timestamp">Ready</span>
+                    <span class="message">Upload a CSV file to begin...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
