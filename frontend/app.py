@@ -18,9 +18,10 @@ CORS(app)
 # Import your existing agents
 try:
     from agent_header_check import check_header_and_infer
-    from import_schema_generator import generate_import_script
+    from import_schema_generator import generate_pyspark_import
 except ImportError as e:
     print(f"Warning: Could not import agents: {e}")
+    generate_pyspark_import = None
 
 # LLM function (same as main.py)
 def lmstudio_llm(prompt):
@@ -40,13 +41,54 @@ def lmstudio_llm(prompt):
     response.raise_for_status()
     return response.json()["choices"][0]["message"]["content"]
 
+def generate_fallback_script(file_path, schema):
+    """Generate a fallback PySpark script if the main generator is not available"""
+    fields = schema['fields']
+    spark_schema_fields = []
+    for field in fields:
+        name = field['name']
+        dtype = field['type']
+        nullable = field['nullable']
+        spark_type = {
+            'integer': 'IntegerType()',
+            'float': 'FloatType()',
+            'boolean': 'BooleanType()',
+            'string': 'StringType()',
+            'date': 'DateType()'
+        }.get(dtype, 'StringType()')
+        spark_schema_fields.append(f"StructField('{name}', {spark_type}, {str(nullable)})")
+    
+    spark_schema = ",\n    ".join(spark_schema_fields)
+    filename = os.path.basename(file_path)
+    
+    script = f"""# Databricks PySpark Import Script
+# Generated for: {filename}
+
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, BooleanType, StringType, DateType
+
+spark = SparkSession.builder.getOrCreate()
+
+schema = StructType([
+    {spark_schema}
+])
+
+df = spark.read.csv('{file_path}', header=True, schema=schema)
+df.show(5)
+df.printSchema()
+
+# Optional: Save as Delta table
+# df.write.format("delta").mode("overwrite").saveAsTable("your_table_name")
+"""
+    return script
+
 @app.route('/')
 def serve_frontend():
-    return send_from_directory('frontend', 'index.html')
+    return send_from_directory('.', 'index.html')
 
 @app.route('/<path:filename>')
 def serve_static(filename):
-    return send_from_directory('frontend', filename)
+    return send_from_directory('.', filename)
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
@@ -202,7 +244,11 @@ def generate_script():
             json.dump(schema, f, indent=4)
         
         # Generate script using your existing agent
-        script = generate_import_script(file_path, schema_path)
+        if generate_pyspark_import:
+            script = generate_pyspark_import(file_path, schema_path)
+        else:
+            # Fallback script generation
+            script = generate_fallback_script(file_path, schema)
         
         return jsonify({
             'success': True,
